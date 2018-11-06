@@ -1,0 +1,20 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: istio-ingressgateway
+  namespace: istio-system
+spec:
+  secretName: istio-ingressgateway-certs
+  dnsNames:
+  - "*.istio.showcase.literalice.com"
+  - "*.knative.showcase.literalice.com"
+  acme:
+    config:
+    - dns01:
+        provider: route53
+      domains:
+      - "*.istio.showcase.literalice.com"
+      - "*.knative.showcase.literalice.com"
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
