@@ -19,6 +19,8 @@ package com.monochromeroad.ex.devops.linegateway;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.Map;
+
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -26,6 +28,8 @@ import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.web.client.RestOperations;
 
 @SpringBootApplication
 @LineMessageHandler
@@ -34,19 +38,25 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
+    private final RestOperations restOperations;
+
+    public Application(RestTemplateBuilder restTemplateBuilder) {
+        this.restOperations = restTemplateBuilder.build();
+    }
+
     @EventMapping
     public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         System.out.println("event: " + event);
         final String originalMessageText = event.getMessage().getText();
-        if (originalMessageText.toLowerCase().contains("knative")) {
-            return new TextMessage("Knative!!");
-        }
-        if (originalMessageText.toLowerCase().contains("istio")) {
-            if (originalMessageText.contains("v2")) {
-                return new TextMessage("ISTIO!! v2");
-            } else {
-                return new TextMessage("ISTIO!! v1");
+
+        if (originalMessageText.toLowerCase().contains("knative")
+                || originalMessageText.toLowerCase().contains("istio")) {
+            String url = "devops-ex-greeting";
+            if (originalMessageText.toLowerCase().contains("knative")) {
+                url = "devops-ex-greeting-knative";
             }
+            Map<String, String> greeting = restOperations.getForObject("http://" + url + ":8080", Map.class);
+            return new TextMessage(greeting.get("content"));
         }
         return new TextMessage("I can't understand.");
     }
