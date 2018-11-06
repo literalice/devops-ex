@@ -1,0 +1,33 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: lineapi
+spec:
+  hosts:
+  - api.line.me
+  ports:
+  - number: 443
+    name: https
+    protocol: HTTPS
+  resolution: DNS
+  location: MESH_EXTERNAL
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: lineapi
+spec:
+  hosts:
+  - api.line.me
+  tls:
+  - match:
+    - port: 443
+      sni_hosts:
+      - api.line.me
+    route:
+    - destination:
+        host: api.line.me
+        port:
+          number: 443
+      weight: 100
+
