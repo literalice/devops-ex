@@ -47,18 +47,15 @@ public class Application {
     @EventMapping
     public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         System.out.println("event: " + event);
-        final String originalMessageText = event.getMessage().getText();
+        final String originalMessageText = event.getMessage().getText().toLowerCase();
 
-        if (originalMessageText.toLowerCase().contains("knative")
-                || originalMessageText.toLowerCase().contains("istio")) {
-            String url = "devops-ex-greeting";
-            if (originalMessageText.toLowerCase().contains("knative")) {
-                url = "devops-ex-greeting-knative";
-            }
-            Map<String, String> greeting = restOperations.getForObject("http://" + url + ":8080", Map.class);
-            return new TextMessage(greeting.get("content"));
+        String url = "http://devops-ex-greeter:8080";
+        if (originalMessageText.toLowerCase().contains("knative")) {
+            url = "http://devops-ex-greeter-knative:8080";
         }
-        return new TextMessage("I can't understand.");
+
+        Map<String, String> greeting = restOperations.getForObject("http://" + url + ":8080", Map.class);
+        return new TextMessage(greeting.get("content"));
     }
 
     @EventMapping
