@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: ImageStream
+metadata:
+  labels:
+    app: devops-ex-greeter
+  name: devops-ex-greeter
+
+---
+
+kind: "BuildConfig"
+apiVersion: "v1"
+metadata:
+  labels:
+    app: devops-ex-greeter
+  name: "devops-ex-greeter"
+spec:
+  runPolicy: "Serial"
+  triggers: 
+    - type: "ImageChange"
+  source: 
+    git:
+      uri: "https://github.com/literalice/devops-ex.git"
+    contextDir: "greeter" 
+  strategy: 
+    sourceStrategy:
+      from:
+        kind: "ImageStreamTag"
+        name: "redhat-openjdk18-openshift:1.4"
+        namespace: "openshift"
+  output:
+    to:
+      kind: "ImageStreamTag"
+      name: "devops-ex-greeter:latest"
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: devops-ex-greeter-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: devops-ex-greeter
+        version: v1
+    spec:
+      containers:
+      - name: app
+        image: docker-registry.default.svc:5000/showcase-istio/devops-ex-greeter
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ENV_NAME
+          value: "ISTIO v1"
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: devops-ex-greeter-v2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: devops-ex-greeter
+        version: v2
+    spec:
+      containers:
+      - name: app
+        image: docker-registry.default.svc:5000/showcase-istio/devops-ex-greeter
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ENV_NAME
+          value: "ISTIO v2"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-ex-greeter
+  labels:
+    app: devops-ex-greeter
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  selector:
+    app: devops-ex-greeter
