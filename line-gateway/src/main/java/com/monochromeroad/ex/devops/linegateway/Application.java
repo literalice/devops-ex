@@ -49,12 +49,12 @@ public class Application {
         System.out.println("event: " + event);
         final String originalMessageText = event.getMessage().getText().toLowerCase();
 
-        String url = "http://devops-ex-greeter:8080";
+        String url = "http://devops-ex-greeter:8080/api/greeting";
         if (originalMessageText.toLowerCase().contains("knative")) {
-            url = "http://devops-ex-greeter-knative:8080";
+            url = "http://devops-ex-greeter-knative:8080/api/greeting";
         }
 
-        Map<String, String> greeting = restOperations.getForObject("http://" + url + ":8080", Map.class);
+        Map<String, String> greeting = restOperations.getForObject(url, Map.class);
         return new TextMessage(greeting.get("content"));
     }
 
