@@ -51,7 +51,7 @@ public class Application {
 
         String url = "http://devops-ex-greeter:8080/api/greeting";
         if (originalMessageText.toLowerCase().contains("knative")) {
-            url = "http://devops-ex-greeter-knative:8080/api/greeting";
+            url = "http://devops-ex-greeter-knative/api/greeting";
         }
 
         Map<String, String> greeting = restOperations.getForObject(url, Map.class);

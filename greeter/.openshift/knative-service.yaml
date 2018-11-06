@@ -1,0 +1,16 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: devops-ex-greeter-knative
+spec:
+  runLatest:
+    configuration:
+      revisionTemplate:
+        spec:
+          container:
+            image: docker-registry.default.svc:5000/showcase-istio/devops-ex-greeter
+            env:
+            - name: ENV_NAME
+              value: "Knative"
+            - name: ENV_VERSION
+              value: "v1"
