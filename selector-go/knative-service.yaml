@@ -1,0 +1,14 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: devops-ex-selector-knative
+spec:
+  runLatest:
+    configuration:
+      revisionTemplate:
+        spec:
+          container:
+            image: quay.io/literalice/selector-go:0.0.2
+            env:
+            - name: CANDIDATES
+              value: "h-arkt,toshis_,MitsuguShingu,ymst1107,curry9999,baum204,tmogi,odoru99,snogami,yskida,kyohei-nakamura,YasuhisaOchiai,kawakamimanabu,dice_K247,fujisakih14,HIROCASTER,HirofumiHida,Gako-Sho,gashirar,Alice_You,s1g,shota0123art,sogaoh,kureb,kyohei_kitamura,raigodsk,yo12525,a2uky,kitayama_t,g40244,takumihashimoto,tantan03,nakanakashin,9106240715,greenteacat,ykhroki,hifujiwara,yagi_shinnosuke,uchy,kuroshun96,hnw,tom__bo_CS,k-murakata,MasakazuTakasho,bussorenre,sonots,y-uemura55,y_n_ag,yutakatay,komapotter,tyutat,ju_imamura,nobuto_m,nagashi_ma_w,HiroyaYamaguchi,kanata2003,kawamoto00,yuri0x,ryota_suenaga,y_f_alpaka,hayato_suzuki_771,IsaoHaga,onotk,yochizo,takanorisuzuki,hnron,vacuuuuum,san-tak,kkoj,hoiya2483,yukinobu_abe,matsushy,sky_jokerxx,akira6592,SyunsukeHAYASHI,ryu_z10,enagok,huki3373,nagatotto,ao_ninoude,showhen,cafenero_777,daisuke555,tnakaji,1993Chihiro,hiro1986t,nokton,restv6417,watd,miyacomaru,tnagata3,miporin,TakehikoTomiyama,windhole,passion-frt,mhiramat,obi_yuta,yukimlt,tsuyu_28,kimura_shigeaki,d_Joker,n_agetsu,dwap392,tetsuya_y,hyamada,SightSeeker,hyoshiok,emaggame,yoshitan,h-inoue,Koji_Ishikawa,nahomood,miu_flash,iwgp_konta,gsuehiro,RyojiNoma,necd-yama,ossc_web,ka0o0o,yoshikaw,kaitoii11,nonakap,kei59,shimizu_daisuke,n-satoshi,hamahiro,nadesic,m24ttmhk,connpassnouser,nobuking,noirso,NTintokyo,wamekukyouzin,mrkn,lhnam298,attakei,kishiyyyyy,segami_cx,fusagiko,YanagidaTsutomu,badecafe,fraiser,ito_,yyamano,jir01030,215,kazurin,takashinkmr,m-tamura,yacchone,a_ogawa00,narumi_,Protom512,kazuiio,mty,misogaku,rinako_yokota,peanweb,kosugeyohei,rakeinte-,thaim,ka_zu_8,chikumin,furandon_pig,nightyknite,akichan32,KitaraTech,0xmks,mogumogu0eng,m2akira9,kys,m-takahashi-if,uenishin,takaidohigasi,miyuk,mapk0y,ruotomayataki,tomoaki,morihaya"

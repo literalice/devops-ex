@@ -8,7 +8,7 @@ spec:
       revisionTemplate:
         spec:
           container:
-            image: docker-registry.default.svc:5000/showcase-istio/devops-ex-greeter
+            image: quay.io/literalice/greeter-go:0.0.1
             env:
             - name: ENV_NAME
               value: "Knative"

@@ -50,6 +50,14 @@ public class Application {
         final String originalMessageText = event.getMessage().getText().toLowerCase();
 
         String url = "http://devops-ex-greeter:8080/api/greeting";
+
+        if (originalMessageText.contains("抽選")) {
+            String number = originalMessageText.replaceAll("[^0-9]", "");
+            url = "http://devops-ex-selector-knative.showcase-istio.svc.cluster.local/api/winners?number=" + number;
+            String list = restOperations.getForObject(url, String.class);
+            return new TextMessage(list);
+        }
+
         if (originalMessageText.toLowerCase().contains("knative")) {
             url = "http://devops-ex-greeter-knative.showcase-istio.svc.cluster.local/api/greeting";
         }
