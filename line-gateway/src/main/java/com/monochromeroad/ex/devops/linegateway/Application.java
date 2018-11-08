@@ -54,8 +54,9 @@ public class Application {
         if (originalMessageText.contains("抽選")) {
             String number = originalMessageText.replaceAll("[^0-9]", "");
             url = "http://devops-ex-selector-knative.showcase-istio.svc.cluster.local/api/winners?number=" + number;
-            String list = restOperations.getForObject(url, String.class);
-            return new TextMessage(list);
+            Winners list = restOperations.getForObject(url, Winners.class);
+            String message = "抽選結果です！！ \n" + String.join("\n", list.getWinners());
+            return new TextMessage(message);
         }
 
         if (originalMessageText.toLowerCase().contains("knative")) {
